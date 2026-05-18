@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: hakangleissman/spring-boot2:1.0.0
+          tags: hakangleissman/jwt-auth-server:1.0.0
 
 
 
