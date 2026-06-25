@@ -19,7 +19,7 @@ jobs:
     env:
       AWS_REGION: eu-north-1
       ECR_REPOSITORY: hakangleissman/spring-boot-test
-      IMAGE_TAG: 1.0.1
+      IMAGE_TAG: 1.0.2
 
     steps:
       - name: Checkout source
