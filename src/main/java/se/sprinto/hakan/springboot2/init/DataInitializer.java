@@ -20,13 +20,16 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        User user = new User();
-        user.setUsername("hakan.gleissman@gmail.com");
-        user.setPassword(passwordEncoder.encode("string"));
-        user.setEmail("hello@gmail.com");
-        user.setRole("ADMIN");
-        appUserRepository.save(user);
-        System.out.println("Init finished");
+        if (appUserRepository.findAll().isEmpty()) {
+            User user = new User();
+            user.setUsername("hakan.gleissman@gmail.com");
+            user.setPassword(passwordEncoder.encode("string"));
+            user.setEmail("hello@gmail.com");
+            user.setRole("ADMIN");
+            appUserRepository.save(user);
+            System.out.println("Init finished");
+        }
+
 
     }
 }

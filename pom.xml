@@ -13,7 +13,7 @@
 
     <groupId>se.sprinto.hakan</groupId>
     <artifactId>jwt-resource-server</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>jwt-resource-server</name>
     <description>JWT auth server for a microservice architecture</description>
 
