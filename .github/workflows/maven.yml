@@ -33,7 +33,7 @@ jobs:
           cache: maven
 
       - name: Build and test with Maven
-        run: mvn clean package
+        run: mvn --batch-mode package
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
