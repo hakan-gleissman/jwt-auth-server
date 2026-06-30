@@ -28,6 +28,7 @@ public class DataInitializer {
             user.setRole("ADMIN");
             appUserRepository.save(user);
             System.out.println("Init finished");
+            //
         }
 
 
