@@ -26,8 +26,8 @@
     </appender>
 
     <!-- Application package logger → file only -->
-    <logger name="se.sprinto.hakan.springboot2" level="INFO" additivity="false">
-        <appender-ref ref="APP_FILE"/>
+    <logger name="se.sprinto.hakan.springboot2" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
     <!-- Root logger → console (covers Spring framework logs) -->
