@@ -16,11 +16,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: eu-north-1
-      ECR_REPOSITORY: hakangleissman/spring-boot-test
-      IMAGE_TAG: 1.0.4
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -39,11 +34,16 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::728723627546:role/github-actions-role-aws
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: eu-north-1
 
       - name: Log in to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Get version from pom.xml
+        id: get-version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -51,5 +51,4 @@ jobs:
           context: .
           push: ${{ github.event_name == 'push' }}
           tags: |
-            ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            ${{ steps.ecr-login.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+            ${{ steps.ecr-login.outputs.registry }}/hakangleissman/spring-boot-test:${{ steps.get-version.outputs.VERSION }}

@@ -23,13 +23,14 @@ public class DataInitializer {
         if (appUserRepository.findAll().isEmpty()) {
             User user = new User();
             user.setUsername("hakan.gleissman@gmail.com");
-            user.setPassword(passwordEncoder.encode("string"));
+            user.setPassword(passwordEncoder.encode("password123"));
             user.setEmail("hello@gmail.com");
             user.setRole("ADMIN");
             appUserRepository.save(user);
-            System.out.println("Init finished");
-            //
+            System.out.println("Default user saved!");
         }
+
+        //
 
 
     }
