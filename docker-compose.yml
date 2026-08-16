@@ -1,6 +1,8 @@
 services:
   postgres:
     image: postgres:16
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -12,16 +14,16 @@ services:
       interval: 10s
       retries: 5
 
-  app:
+  auth-service:
     logging:
       driver: awslogs
       options:
         awslogs-region: eu-north-1
         awslogs-group: /myapp/app
-        awslogs-stream: app
-    image: 728723627546.dkr.ecr.eu-north-1.amazonaws.com/hakangleissman/spring-boot-test:${APP_VERSION}
+        awslogs-stream: auth-service
+    image: 728723627546.dkr.ecr.eu-north-1.amazonaws.com/hakangleissman/spring-boot-test:${AUTH_SERVICE_VERSION}
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8081:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -32,6 +34,69 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
       JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+
+  product-service:
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-north-1
+        awslogs-group: /myapp/app
+        awslogs-stream: product-service
+    image: 728723627546.dkr.ecr.eu-north-1.amazonaws.com/hakangleissman/product-service:${PRODUCT_SERVICE_VERSION}
+    ports:
+      - "127.0.0.1:8082:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      AUTH_SERVER_JWKS_URI: ${AUTH_SERVER_JWKS_URI}
+  order-service:
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-north-1
+        awslogs-group: /myapp/app
+        awslogs-stream: order-service
+    image: 728723627546.dkr.ecr.eu-north-1.amazonaws.com/hakangleissman/order-service:${ORDER_SERVICE_VERSION}
+    ports:
+      - "127.0.0.1:8083:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydb
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      AUTH_SERVER_JWKS_URI: ${AUTH_SERVER_JWKS_URI}
+      PRODUCT_SERVICE_BASE_URL: ${PRODUCT_SERVICE_BASE_URL}
+  email-service:
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-north-1
+        awslogs-group: /myapp/app
+        awslogs-stream: email-service
+    image: 728723627546.dkr.ecr.eu-north-1.amazonaws.com/hakangleissman/email-service:${EMAIL_SERVICE_VERSION}
+    ports:
+      - "127.0.0.1:8084:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+    environment:
+      MAIL_ACCOUNT: ${MAIL_ACCOUNT}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+
+
 
 volumes:
   postgres_data:
