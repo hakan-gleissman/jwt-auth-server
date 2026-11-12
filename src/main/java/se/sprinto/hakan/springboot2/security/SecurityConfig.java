@@ -97,6 +97,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login", "/auth/jwks").permitAll()
                         .requestMatchers("/users/register").permitAll()
+                        .requestMatchers("/devops/demo/*").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable());
