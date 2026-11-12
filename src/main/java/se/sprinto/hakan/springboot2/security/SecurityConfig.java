@@ -98,6 +98,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "/auth/jwks").permitAll()
                         .requestMatchers("/users/register").permitAll()
                         .requestMatchers("/devops/demo/*").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable());
