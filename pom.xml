@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.6</version>
         <relativePath/>
     </parent>
 
     <groupId>se.sprinto.hakan</groupId>
     <artifactId>jwt-resource-server</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <name>jwt-resource-server</name>
     <description>JWT auth server for a microservice architecture</description>
 
